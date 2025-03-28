@@ -88,14 +88,17 @@ function updatePackageJson(targetDir: string, answers: Record<string, any>) {
         packageJson.name = answers.projectName || path.basename(targetDir);
         packageJson.version = '0.1.0'; // Start new projects at 0.1.0
         packageJson.description = answers.description || '';
-        // Clear potentially sensitive or template-specific fields
-        delete packageJson.bin; // The new project isn't necessarily a CLI tool itself
+
+        // Update the bin field for the new project name
+        packageJson.bin = {
+            [answers.projectName]: "dist/initialize.js"
+        };
+
+        // Clear other potentially sensitive or template-specific fields
         delete packageJson.author; // Can add prompt later
         delete packageJson.repository;
         delete packageJson.bugs;
         delete packageJson.homepage;
-        // Reset scripts if needed, or keep them
-        // packageJson.scripts = { ... }; // Example: reset scripts
 
         // Write the updated package.json
         fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
