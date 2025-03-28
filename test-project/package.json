@@ -1,11 +1,8 @@
 {
-  "name": "mcp-server-template",
-  "version": "1.1.0",
-  "description": "MCP Server Template based on recommended practices",
+  "name": "test-project",
+  "version": "0.1.0",
+  "description": "My new MCP Server",
   "main": "dist/server.js",
-  "bin": {
-    "create-mcp-server": "dist/initialize.js"
-  },
   "type": "module",
   "scripts": {
     "start": "node dist/server.js",
@@ -20,7 +17,6 @@
     "mcp",
     "model-context-protocol"
   ],
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
