@@ -25,13 +25,13 @@ export const exampleTool = (server: McpServer, config?: Partial<ExampleServiceCo
 
     // Define the async function that handles the tool execution
     const processExampleRequest = async (args: ExampleToolArgs) => {
-        logger.debug(`Received request with args: ${JSON.stringify(args)}`);
+        logger.debug("Received request", { args });
         try {
             // 1. Input Validation (Optional, Zod schema from params can handle basic types)
             // You might add more complex cross-field validation here if needed.
             // Example: Ensure language is handled correctly, defaulting if necessary
             const language = args.language && ['en', 'es', 'fr'].includes(args.language) ? args.language : 'en';
-            logger.debug(`Using language: ${language}`); // Example of using validated/processed args
+            logger.debug("Using language", { language }); // Example of using validated/processed args
 
             // 2. Prepare input for the service
             // The tool acts as an adapter between MCP args and service input DTO
@@ -53,7 +53,7 @@ export const exampleTool = (server: McpServer, config?: Partial<ExampleServiceCo
             };
 
         } catch (error) {
-            logger.error(`Error processing request: ${error}`);
+            logger.error("Error processing request", error, { args });
 
             // 5. Map service errors to McpError
             if (error instanceof ValidationError) {
@@ -83,5 +83,5 @@ export const exampleTool = (server: McpServer, config?: Partial<ExampleServiceCo
         processExampleRequest // Pass the async handler function
     );
 
-    logger.info(`Tool registered: ${TOOL_NAME}`);
+    logger.info("Tool registered", { toolName: TOOL_NAME });
 };

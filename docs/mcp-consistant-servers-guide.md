@@ -37,7 +37,7 @@ src/
 ├── utils/
 │   ├── contextSanitizer.ts    # Example utility
 │   ├── errors.ts              # Custom error classes
-│   ├── logging.ts             # Simple logger utility
+│   ├── logger.ts              # Structured JSON logger utility (stderr)
 │   └── index.ts               # Barrel file for exporting utils
 ├── initialize.ts              # Creates and configures the McpServer instance
 └── server.ts                  # Entry point, connects transport, starts server
@@ -117,7 +117,7 @@ export class YourService {
 
   public async processData(inputData: unknown): Promise<YourServiceData> {
     const startTime = Date.now();
-    logger.debug(`Processing data with config: ${JSON.stringify(this.config)}`);
+    logger.debug("Processing data", { config: this.config });
 
     // 1. Validate input (using Zod schema if defined)
     // const validationResult = yourServiceDataSchema.safeParse(inputData);
@@ -145,7 +145,7 @@ export class YourService {
         processingTimeMs: Date.now() - startTime,
       },
     };
-    logger.info(`Data processed successfully: ${result.id}`);
+    logger.info("Data processed successfully", { id: result.id });
     return result;
   }
 }
@@ -237,7 +237,7 @@ export const yourTool = (server: McpServer, config?: Partial<YourServiceConfig>)
   const serviceInstance = new YourService(config);
 
   const processYourToolRequest = async (args: YourToolArgs /* or YourToolInput */) => {
-    logger.debug(`Received ${TOOL_NAME} request:`, args);
+    logger.debug(`Received ${TOOL_NAME} request`, { args });
     try {
       // 1. Input Validation/Transformation (Example)
       // Use Zod schema if defined:
@@ -267,7 +267,7 @@ export const yourTool = (server: McpServer, config?: Partial<YourServiceConfig>)
       };
 
     } catch (error) {
-      logger.error(`Error processing ${TOOL_NAME}:`, error);
+      logger.error(`Error processing ${TOOL_NAME}`, error, { args }); // Pass error object and context
 
       // 4. Map errors to McpError
       if (error instanceof ValidationError) {
@@ -295,7 +295,7 @@ export const yourTool = (server: McpServer, config?: Partial<YourServiceConfig>)
     processYourToolRequest
   );
 
-  logger.info(`Tool registered: ${TOOL_NAME}`);
+  logger.info("Tool registered", { toolName: TOOL_NAME });
 };
 ```
 
@@ -413,7 +413,7 @@ export class ConfigurationManager {
 * **Tool Layer (`*Tool.ts`):** Acts as an adapter. Handles MCP specifics: receives args, calls service, formats output, maps errors to `McpError`.
 * **Configuration:** Use `ConfigurationManager` singleton for centralized config.
 * **Error Handling:** Use custom error classes internally; map to `McpError` in the tool layer.
-* **Logging:** Use the simple `logger` utility.
+* **Logging:** Use the structured JSON logger utility (`src/utils/logger.ts`) which writes to `stderr`. Include relevant context objects in logs.
 * **Barrel Files (`index.ts`):** Use them in `services`, `types`, `utils` for cleaner imports.
 
 ---

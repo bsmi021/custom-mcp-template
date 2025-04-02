@@ -89,16 +89,20 @@ function updatePackageJson(targetDir: string, answers: Record<string, any>) {
         packageJson.version = '0.1.0'; // Start new projects at 0.1.0
         packageJson.description = answers.description || '';
 
-        // Update the bin field for the new project name
-        packageJson.bin = {
-            [answers.projectName]: "dist/initialize.js"
-        };
+        // DO NOT set the bin field in the generated project.
+        // The generated project is a server, not a create-* command.
+        delete packageJson.bin; // Explicitly remove bin if it exists in template
 
         // Clear other potentially sensitive or template-specific fields
         delete packageJson.author; // Can add prompt later
         delete packageJson.repository;
         delete packageJson.bugs;
         delete packageJson.homepage;
+
+        // Fix the build script for the generated project - it should only run tsc
+        if (packageJson.scripts && packageJson.scripts.build) {
+            packageJson.scripts.build = 'tsc';
+        }
 
         // Write the updated package.json
         fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));

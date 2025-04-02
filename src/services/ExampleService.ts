@@ -15,9 +15,9 @@ export class ExampleService {
         // Allow overriding defaults via constructor injection
         this.config = { ...defaultConfig, ...config };
 
-        logger.info("ExampleService initialized.");
+        logger.info("ExampleService initialized");
         if (this.config.enableDetailedLogs) {
-            logger.debug("ExampleService Config:", this.config);
+            logger.debug("ExampleService Config", { config: this.config });
         }
     }
 
@@ -40,7 +40,7 @@ export class ExampleService {
         const message = `${this.config.greeting},   ${name}!`; // Escaped PowerShell variable syntax
 
         if (this.config.enableDetailedLogs) {
-            logger.debug(`Processing name: ${name}`);
+            logger.debug("Processing name", { name });
         }
 
         // Simulate some async work
@@ -55,7 +55,7 @@ export class ExampleService {
             },
         };
 
-        logger.info(`Example processed for: ${name}`);
+        logger.info("Example processed", { name });
         return result;
     }
 }

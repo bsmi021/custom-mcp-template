@@ -1,6 +1,6 @@
 {
   "name": "mcp-server-template",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "MCP Server Template based on recommended practices",
   "main": "dist/server.js",
   "bin": {

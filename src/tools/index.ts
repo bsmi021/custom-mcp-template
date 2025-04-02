@@ -11,12 +11,12 @@ import { exampleTool } from "./exampleTool.js";
  * This function centralizes tool registration logic.
  */
 export function registerTools(server: McpServer): void {
-    logger.info("Registering tools...");
+    logger.info("Registering tools");
     const configManager = ConfigurationManager.getInstance();
 
     // Register each tool, passing necessary config or services
     exampleTool(server, configManager.getExampleServiceConfig());
     // yourTool(server, configManager.getYourServiceConfig()); // Add new tool registrations
 
-    logger.info("All tools registered.");
+    logger.info("All tools registered");
 }
